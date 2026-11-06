@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://raheemreo.github.io/score_iq_web/sitemap.xml
