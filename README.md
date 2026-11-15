@@ -22,6 +22,10 @@ The intended URL is `https://raheemreo.github.io/score_iq_web/`. Confirm the dep
 
 The website policies were prepared from the app information and the owner’s publication instructions. Keep them aligned with app changes and Google Play Data Safety. Website publication does not update the Android app or Play Console fields.
 
-The exact app package is `com.reotech.scoreiq`. Its public Google Play listing was unavailable when checked. The homepage therefore displays download-pending text. Add the official Play badge only after verifying the exact package’s live listing.
+The Google Play Closed Testing link is for invited testers of `com.reotech.scoreiq`. Switch the website to the public Play listing once it is available.
+
+Share `/score_iq_web/open/exam/`, `/score_iq_web/open/paper/`, `/score_iq_web/open/quiz/`, or `/score_iq_web/open/study-cards/` as needed. Paper URLs accept `?id=<paper-id>` and quiz URLs accept `?paperId=<paper-id>`. Use a catalog paper ID with letters, digits, underscores or hyphens (maximum 128 characters). A quiz link without an ID opens the question paper library. `/score_iq_web/open/study-viewer/` also opens the Study Cards library so readers can choose a card there.
+
+Android verified opening depends on a Play-signed ScoreIQ build with the matching manifest and `https://raheemreo.github.io/.well-known/assetlinks.json`. Each landing page also offers an explicit Android app button and the Closed Testing link.
 
 A custom domain and `app-ads.txt` require confirmed domain control and authorized seller records. No advertising record has been supplied for this deployment.

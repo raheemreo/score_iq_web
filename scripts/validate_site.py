@@ -11,6 +11,14 @@ BASE = "https://raheemreo.github.io/score_iq_web/"
 BASE_PARTS = urlsplit(BASE)
 PAGES = ("", "privacy/", "terms/", "about/", "contact/", "disclaimer/", "delete-account/", "data-request/")
 PLAY = "https://play.google.com/store/apps/details?id=com.reotech.scoreiq"
+PLAY_TEST = "https://play.google.com/apps/testing/com.reotech.scoreiq"
+DEEP_LINK_PAGES = {
+    "exam": ("exam", None),
+    "paper": ("paper", "id"),
+    "quiz": ("quiz", "paperId"),
+    "study-cards": ("study-cards", None),
+    "study-viewer": ("study-cards", None),
+}
 ASSETS = {
     "hero-home-light", "feature-question-papers", "feature-current-affairs",
     "feature-study-cards", "feature-topic-practice", "feature-mistake-review",
@@ -26,6 +34,8 @@ class Page(HTMLParser):
         self.canonical = None
         self.headings = 0
         self.has_description = False
+        self.robots = None
+        self.open_app = None
         self.feed(path.read_text(encoding="utf-8"))
 
     def handle_starttag(self, tag, attrs):
@@ -39,11 +49,15 @@ class Page(HTMLParser):
             self.canonical = attrs["href"]
         if tag == "meta" and attrs.get("name") == "description":
             self.has_description = bool(attrs.get("content"))
+        if tag == "meta" and attrs.get("name") == "robots":
+            self.robots = attrs.get("content")
+        if tag == "a" and attrs.get("id") == "open-app":
+            self.open_app = attrs
         if tag == "img":
             assert "alt" in attrs and attrs.get("width") and attrs.get("height"), attrs
             self.images.append(attrs)
-        if tag in ("a", "link", "img"):
-            key = "src" if tag == "img" else "href"
+        if tag in ("a", "link", "img", "script"):
+            key = "src" if tag in ("img", "script") else "href"
             if key in attrs:
                 self.links.append(attrs[key])
 
@@ -64,6 +78,19 @@ def validate():
         for footer_route in PAGES[1:]:
             assert any(urljoin(BASE + route, link) == BASE + footer_route for link in page.links), (route, footer_route)
 
+    # Deep-link landing pages have valid canonical URLs but are intentionally noindex.
+    for route, (app_path, query_key) in DEEP_LINK_PAGES.items():
+        location = f"open/{route}/"
+        page = documents[serve_path(location)]
+        assert page.canonical == BASE + location, location
+        assert page.has_description and page.headings == 1, location
+        assert "main" in page.ids, location
+        assert page.robots == "noindex,follow", location
+        assert page.open_app and page.open_app.get("href") == f"scoreiq://app/{app_path}", location
+        assert page.open_app.get("data-paper-query") == query_key, location
+        assert ("../../assets/open-paper-link.js" in page.links) == bool(query_key), location
+        assert PLAY_TEST in page.links, location
+
     checked = 0
     for path, page in documents.items():
         for link in page.links:
@@ -72,6 +99,8 @@ def validate():
             if target.netloc != BASE_PARTS.netloc:
                 if target.netloc == "play.google.com" and target.path == "/store/apps/details":
                     assert target.geturl() == PLAY, link
+                if target.netloc == "play.google.com" and target.path.startswith("/apps/testing/"):
+                    assert target.geturl() == PLAY_TEST, link
                 continue
             assert target.path.startswith(BASE_PARTS.path), (path, link)
             relative = unquote(target.path[len(BASE_PARTS.path):])
