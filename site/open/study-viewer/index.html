@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,follow">
   <meta name="theme-color" content="#f3f7ff">
   <title>Study Card Viewer | ScoreIQ</title>
-  <meta name="description" content="Open ScoreIQ study cards. Individual external card links currently open the card library for safety.">
+  <meta name="description" content="Open the Study Cards library in ScoreIQ and select the card you want to view.">
   <link rel="canonical" href="https://raheemreo.github.io/score_iq_web/open/study-viewer/">
   <link rel="icon" type="image/png" href="../../assets/scoreiq-icon.png">
   <link rel="stylesheet" href="../../assets/styles.css">
@@ -21,34 +21,14 @@
 <main class="doc" id="main" tabindex="-1">
   <p class="eyebrow">Open in ScoreIQ</p>
   <h1>Study Card Viewer</h1>
-  <p class="lead">Open ScoreIQ study cards. Individual external card links currently open the card library for safety.</p>
-  <div class="notice"><p>If ScoreIQ is installed, tap "Open in ScoreIQ". Otherwise, install it from Google Play and return here.</p></div>
+  <p class="lead">Open the Study Cards library in ScoreIQ and select the card you want to view.</p>
+  <div class="notice"><p>Have ScoreIQ on Android? Tap Open in ScoreIQ. Invited testers can install it using their approved Google account.</p></div>
   <div class="actions">
     <a class="button" id="open-app" href="scoreiq://app/study-cards">Open in ScoreIQ</a>
-    <a class="button" href="https://play.google.com/store/apps/details?id=com.reotech.scoreiq" rel="noopener noreferrer">View on Google Play</a>
+    <a href="https://play.google.com/apps/testing/com.reotech.scoreiq">Google Play tester access</a>
     <a href="../../">ScoreIQ website</a>
   </div>
-  <p id="link-notice" aria-live="polite" style="margin-top:1rem"></p>
 </main>
 <footer class="site-footer"><div class="wrap footer-grid"><p>ScoreIQ — Kerala PSC exam preparation.</p><nav aria-label="Policies and support"><a href="../../privacy/">Privacy Policy</a><a href="../../terms/">Terms</a><a href="../../contact/">Support</a><a href="../../delete-account/">Delete Account</a></nav></div></footer>
-<script>
-(() => {
-  const parameters = new URLSearchParams(window.location.search);
-  const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
-  let destination = "/study-cards";
-  const expectedKey = "";
-  if (expectedKey) {
-    const value = parameters.get(expectedKey);
-    if (value && idPattern.test(value)) {
-      destination += (destination.includes("?") ? "&" : "?") +
-        encodeURIComponent(expectedKey) + "=" + encodeURIComponent(value);
-    } else if (value) {
-      document.getElementById("link-notice").textContent =
-        "The content reference is invalid. The app will open the corresponding library.";
-    }
-  }
-  document.getElementById("open-app").setAttribute("href", "scoreiq://app" + destination);
-})();
-</script>
 </body>
 </html>
