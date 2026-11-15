@@ -11,6 +11,7 @@ BASE = "https://raheemreo.github.io/score_iq_web/"
 BASE_PARTS = urlsplit(BASE)
 PAGES = ("", "privacy/", "terms/", "about/", "contact/", "disclaimer/", "delete-account/", "data-request/")
 PLAY = "https://play.google.com/store/apps/details?id=com.reotech.scoreiq"
+DEEP_LINK_PAGES = ("exam", "paper", "quiz", "study-cards", "study-viewer")
 ASSETS = {
     "hero-home-light", "feature-question-papers", "feature-current-affairs",
     "feature-study-cards", "feature-topic-practice", "feature-mistake-review",
@@ -63,6 +64,17 @@ def validate():
         assert "main" in page.ids, route
         for footer_route in PAGES[1:]:
             assert any(urljoin(BASE + route, link) == BASE + footer_route for link in page.links), (route, footer_route)
+
+    # Deep-link landing pages have valid canonical URLs but are intentionally noindex.
+    for route in DEEP_LINK_PAGES:
+        location = f"open/{route}/"
+        page = documents[serve_path(location)]
+        assert page.canonical == BASE + location, location
+        assert page.has_description and page.headings == 1, location
+        assert "main" in page.ids, location
+        html = serve_path(location).read_text(encoding="utf-8")
+        assert 'name="robots" content="noindex,follow"' in html, location
+        assert 'id="open-app"' in html and "scoreiq://app" in html, location
 
     checked = 0
     for path, page in documents.items():
