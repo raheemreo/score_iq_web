@@ -94,6 +94,8 @@ h3 { font-size: 1.17rem; letter-spacing: -.024em; }
 .doc { width: min(100% - 3rem, 48rem); margin-inline: auto; padding-block: clamp(2.5rem, 7vw, 5rem); }
 .doc h1 { margin-block: .45rem .7rem; font-size: clamp(2.5rem, 6vw, 4rem); }
 .doc h2 { margin-block: 1.9rem .55rem; font-size: clamp(1.28rem, 4vw, 1.6rem); letter-spacing: -.035em; }
+.doc .policy-block { margin-top: 1.35rem; }
+.doc .policy-block h3 { margin-bottom: .5rem; }
 .doc p + p { margin-top: .7rem; }
 .doc ul, .doc ol { padding-inline-start: 1.35rem; }
 .doc li + li { margin-top: .45rem; }
